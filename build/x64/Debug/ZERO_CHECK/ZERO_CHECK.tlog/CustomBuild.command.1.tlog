@@ -1,0 +1,10 @@
+^D:\REPOSITORY\CODEXXXCPPGAME\BUILD\CMAKEFILES\C954146BA8C515F3F6DB69B34487B9C1\GENERATE.STAMP.RULE
+setlocal
+D:\CMake\bin\cmake.exe -SD:/repository/codexxxcppgame -BD:/repository/codexxxcppgame/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/repository/codexxxcppgame/build/WoT2D.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
