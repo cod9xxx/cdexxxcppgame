@@ -1,7 +1,0 @@
-D:/repository/codexxxcppgame/build/CMakeFiles/WoT2D.dir
-D:/repository/codexxxcppgame/build/CMakeFiles/ALL_BUILD.dir
-D:/repository/codexxxcppgame/build/CMakeFiles/ZERO_CHECK.dir
-D:/repository/codexxxcppgame/build/external/glfw/CMakeFiles/ALL_BUILD.dir
-D:/repository/codexxxcppgame/build/external/glfw/src/CMakeFiles/glfw.dir
-D:/repository/codexxxcppgame/build/external/glad/CMakeFiles/glad.dir
-D:/repository/codexxxcppgame/build/external/glad/CMakeFiles/ALL_BUILD.dir
