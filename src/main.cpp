@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include <iostream>
+#include "Renderer/ShaderProgram.h"
 
 using namespace std;
 
@@ -58,7 +59,7 @@ void glfwKeyClickCallback (GLFWwindow* pWindow, int key, int scancode,int action
 
 int main(void)
 {
-    /*ĞÎÑÑÈß ÑÂßÙÅÍÍÀß ÍÀØÀ ÄÅĞÆÀÂÀ*/
+    /*Glory to russia!*/
     setlocale(LC_ALL, "Russian");
 
     /*initialize the library */
@@ -97,27 +98,20 @@ int main(void)
         return -1;
     }
 
+    /*enter version of opengl in console*/
+    cout << "Renderer: " << glGetString(GL_RENDERER) << endl;
+    cout << "OpenGL version: " << glGetString(GL_VERSION) << endl;
+
     glClearColor(0, 0, 0, 1);
 
-    /*compile shaders (lines 22, 33)*/
-    GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vs, 1, &vertex_shader, nullptr);
-    glCompileShader(vs);
-
-    GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fs, 1, &fragment_shader, nullptr);
-    glCompileShader(fs);
-
-    GLuint shader_program = glCreateProgram();
-
-    /*link shaders*/
-    glAttachShader(shader_program, vs);
-    glAttachShader(shader_program, fs);
-    glLinkProgram(shader_program);
-
-    /*delete shader after link*/
-    glDeleteShader(vs);
-    glDeleteShader(fs);
+    string vertex_Shader(vertex_shader);
+    string fragmentShader(fragment_shader);
+    Renderer::ShaderProgram shaderProgram(vertex_shader, fragment_shader);
+    if (!shaderProgram.isCompiled())
+    {
+        cerr << "error:can't create shader program" << endl;
+        return -1;
+    }
 
     /*generated and connected buffer for vertexs*/
     GLuint points_vbo = 0;
@@ -146,10 +140,6 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-    /*enter version of opengl in console*/
-    cout << "Renderer: " << glGetString(GL_RENDERER) << endl;
-    cout << "OpenGL version: " << glGetString(GL_VERSION) << endl;
-
     /*loop until the user closes the window */
     while (!glfwWindowShouldClose(pWindow))
     {
@@ -157,7 +147,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         /*output traingle(finally)*/
-        glUseProgram(shader_program);
+        shaderProgram.use();
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
    
