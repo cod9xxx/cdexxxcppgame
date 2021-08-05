@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include <iostream>
+#include <glm/vec2.hpp>
 
 #include "Renderer/ShaderProgram.h"
 #include "Resources/ResourceManager.h"
@@ -29,15 +30,13 @@ GLfloat texturePoints[] = {
     0.0f, 0.0f 
 };
 
-/*making global variables for window size*/
-int g_windowSizeX = 640;
-int g_windowSizeY = 480;
+glm::ivec2 g_windowSize(640, 480);
 
 /*making window size callback*/
 void glfwWindowSizeCallback(GLFWwindow* pWindow, int width, int height) {
-    g_windowSizeX = width;
-    g_windowSizeY = height;
-    glViewport(0, 0, g_windowSizeX/2, g_windowSizeY);
+    g_windowSize.x = width;
+    g_windowSize.y = height;
+    glViewport(0, 0, g_windowSize.x /2, g_windowSize.y);
 }
 
 /*making window close if pressed Esc*/
@@ -63,7 +62,7 @@ int main(int argc, char** argv)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /*create a windowed mode window and its OpenGL context */
-    GLFWwindow* pWindow = glfwCreateWindow(g_windowSizeX, g_windowSizeY, "WoT2d", nullptr, nullptr);
+    GLFWwindow* pWindow = glfwCreateWindow(g_windowSize.x, g_windowSize.y, "WoT2d", nullptr, nullptr);
 
     /*debug window*/
     if (!pWindow)
