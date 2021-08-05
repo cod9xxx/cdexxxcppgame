@@ -4,6 +4,7 @@
 
 #include "Renderer/ShaderProgram.h"
 #include "Resources/ResourceManager.h"
+#include "Renderer/Texture2D.h"
 
 using namespace std;
 
@@ -19,6 +20,13 @@ GLfloat colors[] = {
     1.0f, 0.0f, 0.0f,
     0.0f, 1.0f, 0.0f,
     0.0f, 0.0f, 1.0f
+};
+
+/*created points for texture*/
+GLfloat texturePoints[] = {
+    0.5f, 1.0f, 
+    1.0f, 0.0f, 
+    0.0f, 0.0f 
 };
 
 /*making global variables for window size*/
@@ -96,6 +104,8 @@ int main(int argc, char** argv)
             return -1;
         }
 
+        auto tex = resourceManager.loadTexture("DefaultTexture", "res/textures/texture_mario.png");
+
         /*generated and connected buffer for vertexs*/
         GLuint points_vbo = 0;
         glGenBuffers(1, &points_vbo);
@@ -107,6 +117,11 @@ int main(int argc, char** argv)
         glGenBuffers(1, &colors_vbo);
         glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+
+        GLuint texturePoints_vbo = 0;
+        glGenBuffers(1, &texturePoints_vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, texturePoints_vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(texturePoints), texturePoints, GL_STATIC_DRAW);
 
         /*created vertex array*/
         GLuint vao = 0;
@@ -123,7 +138,15 @@ int main(int argc, char** argv)
         glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-        /*loop until the user closes the window */
+        /*enable texture point array for texture*/
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, texturePoints_vbo);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+        pDeafultShaderProgram->use();
+        pDeafultShaderProgram->setInt("tex", 0);
+
+        /*loop until the user closes the window*/
         while (!glfwWindowShouldClose(pWindow))
         {
             /*render here */
@@ -132,6 +155,7 @@ int main(int argc, char** argv)
             /*output traingle(finally)*/
             pDeafultShaderProgram->use();
             glBindVertexArray(vao);
+            tex->bind();
             glDrawArrays(GL_TRIANGLES, 0, 3);
 
             /*swap front and back buffers */
