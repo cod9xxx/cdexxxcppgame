@@ -2,6 +2,8 @@
 #include <glfw/glfw3.h>
 #include <iostream>
 #include <glm/vec2.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "Renderer/ShaderProgram.h"
 #include "Resources/ResourceManager.h"
@@ -11,9 +13,9 @@ using namespace std;
 
 /*created a size values of triangle*/
 GLfloat point[] = {
-    0.0f, 0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    -0.5f, -0.5f, 0.0f
+    0.0f, 50.f, 0.0f,
+    50.f, -50.f, 0.0f,
+    -50.f, -50.f, 0.0f
 };
 
 /*created array for color of triangle*/
@@ -145,6 +147,16 @@ int main(int argc, char** argv)
         pDeafultShaderProgram->use();
         pDeafultShaderProgram->setInt("tex", 0);
 
+        glm::mat4 modelMatrix_1 = glm::mat4(1.f);
+        modelMatrix_1 = glm::translate(modelMatrix_1, glm::vec3(100.f, 50.f, 0.f));
+
+        glm::mat4 modelMatrix_2 = glm::mat4(1.f);
+        modelMatrix_2 = glm::translate(modelMatrix_2, glm::vec3(590.f, 50.f, 0.f));
+
+        glm::mat4 projextionMatrix = glm::ortho(0.f, static_cast<float>(g_windowSize.x), 0.f, static_cast<float>(g_windowSize.y), -100.f, 100.f);
+
+        pDeafultShaderProgram->setMatrix4("projectionMat", projextionMatrix);
+
         /*loop until the user closes the window*/
         while (!glfwWindowShouldClose(pWindow))
         {
@@ -155,6 +167,11 @@ int main(int argc, char** argv)
             pDeafultShaderProgram->use();
             glBindVertexArray(vao);
             tex->bind();
+
+            pDeafultShaderProgram->setMatrix4("modelMat", modelMatrix_1);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+
+            pDeafultShaderProgram->setMatrix4("modelMat", modelMatrix_2);
             glDrawArrays(GL_TRIANGLES, 0, 3);
 
             /*swap front and back buffers */
